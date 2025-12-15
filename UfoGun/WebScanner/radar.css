@@ -1,0 +1,29 @@
+/* Radar Blip (Red Dots) */
+.radar-blip {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #ff3333;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ff0000, 0 0 16px #ff0000;
+    opacity: 0;
+    z-index: 5;
+    animation: blipAnim 2.5s ease-out forwards;
+}
+
+@keyframes blipAnim {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    20% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}

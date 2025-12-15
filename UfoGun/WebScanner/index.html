@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UfoGun Scanner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="view.css">
+    <link rel="stylesheet" href="intro.css">
+    <link rel="stylesheet" href="radar.css">
+</head>
+
+<body>
+
+    <!-- Intro / Splash Screen -->
+    <div id="intro-overlay">
+        <div class="intro-content">
+            <img src="ufogun_logo.png" alt="UfoGun Logo" class="intro-logo">
+            <div class="intro-beam"></div>
+            <div class="intro-particles"></div>
+        </div>
+    </div>
+
+    <!-- Animated Background Layer -->
+    <div class="bg-animation">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
+        <div class="cyber-grid"></div>
+
+        <!-- Animated UFOs -->
+        <div class="ufo-mothership">
+            <div class="ufo-dome"></div>
+            <div class="ufo-disk"></div>
+            <div class="ufo-lights"></div>
+        </div>
+
+        <div class="ufo-scout">
+            <div class="scout-body"></div>
+            <div class="scout-beam"></div>
+        </div>
+    </div>
+
+    <!-- Main Glass App Window -->
+    <div class="glass-window">
+
+        <!-- Tabbed Header -->
+        <nav class="app-tabs">
+            <div class="nav-brand">
+                <span class="dot"></span>
+                UfoGun Scanner
+            </div>
+            <ul class="nav-menu tab-menu">
+                <li><a href="#" class="nav-link tab-link active"
+                        onclick="switchView('dashboard'); return false;">Dashboard</a></li>
+                <li><a href="#" class="nav-link tab-link" onclick="switchView('reports'); return false;">Reports</a>
+                </li>
+                <li><a href="#" class="nav-link tab-link" onclick="switchView('settings'); return false;">Settings</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="app-content">
+
+            <!-- VIEW: DASHBOARD -->
+            <div id="view-dashboard" class="view-section active">
+                <div class="hero-scan">
+                    <div class="scan-radar-overlay" id="scanRadar"></div>
+                    <h1 class="hero-title">Deep Web Reconnaissance</h1>
+                    <p class="hero-desc">Perform advanced vulnerability assessments and admin page enumeration with a
+                        single
+                        click.</p>
+
+                    <div class="search-box">
+                        <input type="text" id="targetUrl" class="search-input"
+                            placeholder="Enter target domain or IP (e.g. 192.168.1.1)" autocomplete="off">
+                        <button id="startScanBtn" class="btn-scan">START SCAN</button>
+                    </div>
+                </div>
+
+                <!-- Terminal Output (Visible during scan) -->
+                <div id="terminal" class="terminal-window">
+                    <div class="log-line cmd">&gt; System initialized. Ready for input.</div>
+                </div>
+
+                <!-- Quick Recent Activity -->
+                <div class="card mt-2">
+                    <h3 class="mb-1 text-lg">Recent Activity</h3>
+                    <table class="data-table" id="recentTable">
+                        <thead>
+                            <tr>
+                                <th>Target</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- JS injected -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- VIEW: REPORTS -->
+            <div id="view-reports" class="view-section">
+                <div class="report-header">
+                    <div>
+                        <h2 class="target-url" id="reportTitle">Scan Report</h2>
+                        <span class="scan-meta" id="reportDate">Select a report to view details</span>
+                    </div>
+                    <div>
+                        <button id="btnDownloadReport" class="btn-new-scan"
+                            style="display:none; margin-right: 10px; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <span>↓</span> Download
+                        </button>
+                        <button class="btn-new-scan" onclick="switchView('dashboard')">
+                            <span class="icon-plus">+</span> New Scan
+                        </button>
+                    </div>
+                </div>
+
+                <div id="reportListContainer">
+                    <!-- List of reports if no specific report selected -->
+                    <div class="vulnerability-grid" id="allReportsGrid">
+                        <!-- Cards representing reports will go here -->
+                    </div>
+                </div>
+
+                <div id="reportDetailContainer" class="hidden">
+                    <div class="vulnerability-grid" id="vulnGrid">
+                        <!-- Vulnerability Items injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: SETTINGS -->
+            <div id="view-settings" class="view-section">
+                <div class="settings-grid">
+                    <!-- Config Card -->
+                    <div class="card settings-card">
+                        <h2 class="mb-1-5">Scanner Configuration</h2>
+
+                        <div class="form-group">
+                            <label class="form-label">User Agent</label>
+                            <input type="text" value="Mozilla/5.0 (compatible; UfoGun/1.0)"
+                                class="search-input form-control-settings">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Scan Intensity</label>
+                            <select class="search-input form-control-settings">
+                                <option>Standard (Safe)</option>
+                                <option>Aggressive (Admin & SQLi)</option>
+                                <option>Stealth (Quiet)</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Theme Card -->
+                    <div class="card settings-card">
+                        <h2 class="mb-1-5">Interface Theme</h2>
+                        <p class="text-muted mb-1">Select your preferred visual style.</p>
+
+                        <div class="theme-options">
+                            <div class="theme-option active" onclick="setTheme('default')">
+                                <div class="theme-preview theme-red"></div>
+                                <span>Red Alert</span>
+                            </div>
+                            <div class="theme-option" onclick="setTheme('cyber')">
+                                <div class="theme-preview theme-blue"></div>
+                                <span>Cyber Punk</span>
+                            </div>
+                            <div class="theme-option" onclick="setTheme('matrix')">
+                                <div class="theme-preview theme-green"></div>
+                                <span>Matrix</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="danger-zone mt-2">
+                    <div class="danger-header">
+                        <span class="danger-icon">⚠️</span>
+                        <h3>System Operations</h3>
+                    </div>
+                    <div class="danger-body">
+                        <p class="text-muted">Once you reset the database, all scan history and reports will be
+                            permanently
+                            deleted. This action cannot be undone.</p>
+                        <button class="btn-reset-system" onclick="resetDb()">
+                            <span class="icon-refresh">↺</span> Factory Reset System
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+    <!-- /Main Glass App Window -->
+
+    <!-- TEMPLATES -->
+    <template id="template-report-item">
+        <div class="vuln-item report-card cursor-pointer">
+            <div class="report-status-indicator"></div>
+            <div class="report-content">
+                <div class="report-icon-box">
+                    <span class="report-icon-text">WWW</span>
+                </div>
+                <div class="report-details">
+                    <h3 class="vuln-title"></h3> <!-- URL -->
+                    <div class="report-meta">
+                        <span class="report-date"></span>
+                        <span class="dot-sep">•</span>
+                        <span class="vuln-count"></span>
+                    </div>
+                </div>
+                <div class="report-arrow">→</div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-vuln-item">
+        <div class="vuln-item">
+            <div class="vuln-header">
+                <span class="vuln-title"></span>
+                <span class="severity"></span>
+            </div>
+            <div class="vuln-desc"></div>
+            <div class="vuln-path"></div>
+        </div>
+    </template>
+
+    <template id="template-recent-row">
+        <tr>
+            <td class="col-url"></td>
+            <td class="col-date text-muted"></td>
+            <td class="col-status"><span class="severity"></span></td>
+            <td class="col-action text-right"><button class="btn-icon">→</button></td>
+        </tr>
+    </template>
+
+    <template id="template-clean-scan">
+        <div class="vuln-item">
+            <div class="vuln-title">Clean Scan</div>
+            <div class="vuln-desc">No significant issues found.</div>
+        </div>
+    </template>
+
+    <template id="template-empty-state">
+        <div class="empty-state">No scans performed yet.</div>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

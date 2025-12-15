@@ -1,0 +1,113 @@
+/* --- INTRO / SPLASH SCREEN --- */
+#intro-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    animation: fadeOutIntro 0.5s ease-out 3.5s forwards;
+}
+
+.intro-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.intro-logo {
+    max-width: 400px;
+    width: 80%;
+    opacity: 0;
+    transform: scale(0.5);
+    filter: drop-shadow(0 0 0px var(--brand-primary));
+    animation: logoEntrance 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    z-index: 2;
+}
+
+.intro-beam {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, #fff 10%, var(--brand-primary) 40%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
+    z-index: 3;
+    animation: ufoExplosion 0.8s ease-out 2.2s forwards;
+    pointer-events: none;
+}
+
+.intro-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.2), transparent);
+    opacity: 0;
+    z-index: 1;
+    animation: ambientGlow 2s ease-in-out infinite;
+}
+
+@keyframes logoEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.1) rotate(-10deg);
+        filter: drop-shadow(0 0 0px var(--brand-primary));
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 20px var(--brand-primary));
+    }
+
+    80% {
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: drop-shadow(0 0 50px var(--brand-secondary));
+    }
+}
+
+@keyframes ufoExplosion {
+    0% {
+        width: 10px;
+        height: 10px;
+        opacity: 1;
+    }
+
+    50% {
+        width: 200vw;
+        height: 200vw;
+        opacity: 0.8;
+    }
+
+    100% {
+        width: 250vw;
+        height: 250vw;
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOutIntro {
+    to {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+}
