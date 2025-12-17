@@ -426,12 +426,46 @@ def scan_target():
         html_issues, html_logs = analyze_html(response.text, target_url)
         results["vulnerabilities"].extend(html_issues)
         
-        # 7. Advanced Analysis (SQLi, WAF, OSINT)
-        results["logs"].append("Performing Advanced Threat Analysis...")
-        adv_issues = check_advanced_vulnerabilities(target_url, response.text)
-        results["vulnerabilities"].extend(adv_issues)
-        if adv_issues:
-             results["logs"].append(f"Advanced features detected {len(adv_issues)} new items.")
+        # 7. Advanced Analysis (SQLi, WAF, OSINT, XSS, LFI)
+        results["logs"].append("Performing Deep Threat Analysis (Crawling & Fuzzing)...")
+        
+        # Use the new module
+        from vulnerability_scanner import AdvancedScanner
+        scanner = AdvancedScanner()
+        deep_issues = scanner.perform_scan(target_url)
+        
+        results["vulnerabilities"].extend(deep_issues)
+        if deep_issues:
+             results["logs"].append(f"Deep Scan detected {len(deep_issues)} critical items.")
+        
+        # Keep the WAF and Email checks from the old function as they are useful OSINT
+        # We can quickly re-implement or call a stripped down version if needed, 
+        # but for now let's just rely on the new scanner + the existing header/admin checks.
+        # Check WAF specifically here if not in new scanner
+        waf_signatures = ['cloudflare', 'sucuri', 'incapsula', 'akamai', 'aws-waf']
+        detected_wafs = []
+        lower_html = response.text.lower()
+        for waf in waf_signatures:
+            if waf in lower_html:
+                detected_wafs.append(waf)
+        if detected_wafs:
+             results["vulnerabilities"].append({
+                "title": "WAF Detected",
+                "severity": "info",
+                "desc": f"Web Application Firewall signature found: {', '.join(detected_wafs)}",
+                "path": "Kind: " + ", ".join(detected_wafs)
+            })
+
+        # Email OSINT
+        import re
+        emails = set(re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', response.text))
+        if emails:
+            results["vulnerabilities"].append({
+                "title": f"Information Disclosure: Emails ({len(emails)})",
+                "severity": "info",
+                "desc": "Public email addresses found: " + ", ".join(list(emails)[:5]),
+                "path": "Source Code"
+            })
 
         # 8. Admin Enumeration
         results["logs"].append("Enumerating Admin Paths...")
